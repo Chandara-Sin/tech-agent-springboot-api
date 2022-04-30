@@ -1,6 +1,7 @@
 package com.scd.tech_agent.model;
 
-import com.scd.tech_agent.util.Gender;
+// import org.hibernate.annotations.Type;
+// import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 
@@ -14,10 +15,10 @@ public class Employees {
 
     // EnumType.STRING is written and read from the corresponding database column
     // e.g. 1,2,3
-    @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('male', 'female','not_application')")
-    private Gender gender;
-
+    // @Enumerated(EnumType.STRING)
+    // @Column(name = "gender", columnDefinition =
+    // "ENUM('not_known','male','female','not_application')")
+    private String gender;
     private String hire_date;
     private Integer salr_id;
     private Integer dept_id;
@@ -50,11 +51,11 @@ public class Employees {
         this.last_name = last_name;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -94,9 +95,9 @@ public class Employees {
     public String toString() {
         return "tb_employees{" +
                 "id=" + emp_id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", gender=" + gender + '\'' +
+                ", first_name='" + first_name +
+                ", last_name='" + last_name +
+                ", gender=" + gender +
                 ", hire_date='" + hire_date +
                 ", salary_id=" + salr_id +
                 ", position_id=" + postn_id +

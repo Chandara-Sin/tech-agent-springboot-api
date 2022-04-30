@@ -18,11 +18,9 @@ public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
         // "VALUES
         // (:first_name,:last_name,:gender,:hire_date,:salr_id,:dept_id,:postn_id) ",
         // nativeQuery = true)
-        // Integer addEmployee(@Param("first_name") String first_name,
-        // @Param("last_name") String last_name,
-        // @Param("gender") String gender, @Param("hire_date") String hire_date,
-        // @Param("salr_id") Integer salr_id,
-        // @Param("dept_id") Integer dept_id, @Param("postn_id") Integer postn_id);
+        // Integer addEmployee(String first_name, String last_name, String gender,
+        // String hire_date,
+        // Integer salr_id, Integer dept_id, Integer postn_id);
 
         // @Query(value = "SELECT * FROM tb_employees ORDER BY emp_id DESC LIMIT 1",
         // nativeQuery = true)
