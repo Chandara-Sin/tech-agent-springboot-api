@@ -12,6 +12,7 @@ import com.scd.tech_agent.repository.EmployeesRepository;
 import com.scd.tech_agent.util.Gender;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,7 @@ public class EmployeesController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/employee")
-    public Employees addEmployee(@Valid @RequestBody Employees dataparam) {
+    public ResponseEntity<Employees> addEmployee(@Valid @RequestBody Employees dataparam) {
         // System.out.println(dataparam.getFirst_name());
         // System.out.println(dataparam.getLast_name());
         // System.out.println(dataparam.getGender());
@@ -68,7 +69,8 @@ public class EmployeesController {
         // }
         // Employees employee = new Employees();
 
-        return employeesRepo.save(dataparam);
+        // status.code == 201
+        return new ResponseEntity<Employees>(employeesRepo.save(dataparam), HttpStatus.CREATED);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -86,19 +88,20 @@ public class EmployeesController {
         employee.setDept_id(employeeDetails.getDept_id());
         employee.setPostn_id(employeeDetails.getPostn_id());
         Employees updatedEmployee = employeesRepo.save(employee);
-        return ResponseEntity.ok(updatedEmployee);
+        return new ResponseEntity<Employees>(updatedEmployee, HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/employee/{id}")
-    public Map<String, String> deleteEmployee(@PathVariable(value = "id") Integer emp_id) throws DataNotFound {
+    public ResponseEntity<Map<String, String>> deleteEmployee(@PathVariable(value = "id") Integer emp_id)
+            throws DataNotFound {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
 
         employeesRepo.delete(employee);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Employee was deleted successfully");
-        return response;
+        return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
     }
 
 }
