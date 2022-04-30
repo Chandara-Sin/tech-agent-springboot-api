@@ -5,13 +5,17 @@ import java.util.Date;
 public class ErrorDetails {
     private Date timestamp;
     private String message;
-    private String details;
+    private String path;
+    private int status;
+    private String error;
 
-    public ErrorDetails(Date timestamp, String message, String details) {
+    public ErrorDetails(Date timestamp, String message, String path, int status, String error) {
         super();
         this.timestamp = timestamp;
         this.message = message;
-        this.details = details;
+        this.path = path;
+        this.status = status;
+        this.error = error;
     }
 
     public Date getTimestamp() {
@@ -22,7 +26,15 @@ public class ErrorDetails {
         return message;
     }
 
-    public String getDetails() {
-        return details;
+    public String getPath() {
+        return path;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getError() {
+        return error;
     }
 }
