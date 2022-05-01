@@ -10,7 +10,6 @@ public class ErrorDetails {
     private String error;
 
     public ErrorDetails(Date timestamp, String message, String path, int status, String error) {
-        super();
         this.timestamp = timestamp;
         this.message = message;
         this.path = path;
