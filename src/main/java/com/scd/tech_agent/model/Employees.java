@@ -19,6 +19,7 @@ public class Employees {
     // @Column(name = "gender", columnDefinition =
     // "ENUM('not_known','male','female','not_application')")
     private String gender;
+    private String email;
     private String hire_date;
     private Integer salr_id;
     private Integer dept_id;
@@ -49,6 +50,14 @@ public class Employees {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getGender() {
@@ -97,6 +106,7 @@ public class Employees {
                 "id=" + emp_id +
                 ", first_name='" + first_name +
                 ", last_name='" + last_name +
+                ", email='" + email +
                 ", gender=" + gender +
                 ", hire_date='" + hire_date +
                 ", salary_id=" + salr_id +

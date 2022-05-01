@@ -1,5 +1,7 @@
 package com.scd.tech_agent.repository;
 
+import java.util.List;
+
 import com.scd.tech_agent.model.Employees;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,5 +27,10 @@ public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
         // @Query(value = "SELECT * FROM tb_employees ORDER BY emp_id DESC LIMIT 1",
         // nativeQuery = true)
         // Employees getNewEmployee();
+
+        // @Query(value = "SELECT COUNT(email) FROM tb_employees WHERE email = :email ",
+        // nativeQuery = true)
+
+        // List<Integer> findByEmail(String email);
 
 }

@@ -9,7 +9,7 @@ import javax.validation.Valid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.model.Employees;
 import com.scd.tech_agent.repository.EmployeesRepository;
-import com.scd.tech_agent.util.Gender;
+// import com.scd.tech_agent.util.Gender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,17 +23,17 @@ public class EmployeesController {
     @Autowired
     EmployeesRepository employeesRepo;
 
-    public String convertGender(Gender gender) {
-        if (gender.equals(Gender.not_known))
-            return "not_known";
-        else if (gender.equals(Gender.male)) {
-            return "male";
-        } else if (gender.equals(Gender.female)) {
-            return "female";
-        } else {
-            return "not_application";
-        }
-    }
+    // public String convertGender(Gender gender) {
+    // if (gender.equals(Gender.not_known))
+    // return "not_known";
+    // else if (gender.equals(Gender.male)) {
+    // return "male";
+    // } else if (gender.equals(Gender.female)) {
+    // return "female";
+    // } else {
+    // return "not_application";
+    // }
+    // }
 
     @GetMapping("/employees")
     public List<Employees> getAllEmployees() {
@@ -43,6 +43,13 @@ public class EmployeesController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/employee")
     public ResponseEntity<Employees> addEmployee(@Valid @RequestBody Employees dataparam) {
+
+        // List<Integer> duplicate_email =
+        // employeesRepo.findByEmail(dataparam.getEmail());
+        // if (!duplicate_email.isEmpty()) {
+        // throw new DataNotFound("duplicate email");
+        // }
+
         // System.out.println(dataparam.getFirst_name());
         // System.out.println(dataparam.getLast_name());
         // System.out.println(dataparam.getGender());
@@ -82,6 +89,7 @@ public class EmployeesController {
 
         employee.setFirst_name(employeeDetails.getFirst_name());
         employee.setLast_name(employeeDetails.getLast_name());
+        employee.setEmail(employeeDetails.getEmail());
         employee.setGender(employeeDetails.getGender());
         employee.setHire_date(employeeDetails.getHire_date());
         employee.setSalr_id(employeeDetails.getSalr_id());
