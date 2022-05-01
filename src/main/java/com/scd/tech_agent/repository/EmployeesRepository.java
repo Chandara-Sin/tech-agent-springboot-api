@@ -1,6 +1,6 @@
 package com.scd.tech_agent.repository;
 
-import java.util.List;
+// import java.util.List;
 
 import com.scd.tech_agent.model.Employees;
 
@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 // import org.springframework.data.jpa.repository.Query;
 // import org.springframework.data.repository.query.Param;
 // import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
 
         // Wrap database operations in a transaction to prevent data corruption.
