@@ -1,5 +1,7 @@
 package com.scd.tech_agent.repository;
 
+import java.util.List;
+
 // import java.util.List;
 
 import com.scd.tech_agent.model.Employees;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
+
+        List<Employees> findByEmail(String email);
 
         // Wrap database operations in a transaction to prevent data corruption.
         // @Transactional
@@ -32,7 +36,5 @@ public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
 
         // @Query(value = "SELECT COUNT(email) FROM tb_employees WHERE email = :email ",
         // nativeQuery = true)
-
-        // List<Integer> findByEmail(String email);
 
 }
