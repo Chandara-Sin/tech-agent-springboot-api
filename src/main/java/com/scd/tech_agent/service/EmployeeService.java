@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.model.Employees;
 import com.scd.tech_agent.repository.EmployeesRepository;
+import com.scd.tech_agent.util.Gender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,28 +20,21 @@ public class EmployeeService {
     @Autowired
     EmployeesRepository employeesRepo;
 
-    // public String convertGender(Gender gender) {
-    // if (gender.equals(Gender.not_known))
-    // return "not_known";
-    // else if (gender.equals(Gender.male)) {
-    // return "male";
-    // } else if (gender.equals(Gender.female)) {
-    // return "female";
-    // } else {
-    // return "not_application";
-    // }
-    // }
-
     public List<Employees> getAllEmployees() {
         return employeesRepo.findAll();
     }
 
-    public ResponseEntity<Employees> addEmployee(Employees datarequest) {
-        // List<Integer> duplicate_email =
-        // employeesRepo.findByEmail(dataparam.getEmail());
-        // if (!duplicate_email.isEmpty()) {
-        // throw new DataNotFound("duplicate email");
-        // }
+    public Employees addEmployee(Employees datarequest) throws DataInvalid, Exception {
+        List<Employees> duplicate_email = employeesRepo.findByEmail(datarequest.getEmail());
+        if (!duplicate_email.isEmpty()) {
+            throw new DataInvalid("duplicate email");
+        }
+
+        for (Gender all_gender : Gender.values()) {
+            if (all_gender.toString() != datarequest.getGender()) {
+                throw new DataInvalid("gender value : not_known, male, female, not_application");
+            }
+        }
 
         // System.out.println(dataparam.getFirst_name());
         // System.out.println(dataparam.getLast_name());
@@ -66,15 +60,31 @@ public class EmployeeService {
         // Employees new_employee = employeesRepo.getNewEmployee();
         // return new_employee;
         // }
-        // Employees employee = new Employees();
+        //
 
         // status.code == 201
-        return new ResponseEntity<Employees>(employeesRepo.save(datarequest), HttpStatus.CREATED);
+        try {
+            return employeesRepo.save(datarequest);
+        } catch (Exception e) {
+            throw new Exception("Some error occurred while creating the Employee");
+        }
     }
 
-    public ResponseEntity<Employees> updateEmployee(Integer emp_id, Employees employeeDetails) throws DataNotFound {
+    public Employees updateEmployee(Integer emp_id, Employees employeeDetails)
+            throws DataNotFound, DataInvalid, Exception {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
+
+        List<Employees> duplicate_email = employeesRepo.findByEmail(employeeDetails.getEmail());
+        if (!duplicate_email.isEmpty()) {
+            throw new DataInvalid("duplicate email");
+        }
+
+        for (Gender all_gender : Gender.values()) {
+            if (all_gender.toString() != employeeDetails.getGender()) {
+                throw new DataInvalid("gender value : not_known, male, female, not_application");
+            }
+        }
 
         employee.setFirst_name(employeeDetails.getFirst_name());
         employee.setLast_name(employeeDetails.getLast_name());
@@ -84,17 +94,26 @@ public class EmployeeService {
         employee.setSalr_id(employeeDetails.getSalr_id());
         employee.setDept_id(employeeDetails.getDept_id());
         employee.setPostn_id(employeeDetails.getPostn_id());
-        Employees updatedEmployee = employeesRepo.save(employee);
-        return new ResponseEntity<Employees>(updatedEmployee, HttpStatus.OK);
+
+        try {
+            return employeesRepo.save(employee);
+        } catch (Exception e) {
+            throw new Exception("Some error occurred while updating the Employee");
+        }
+
     }
 
-    public ResponseEntity<Map<String, String>> deleteEmployee(Integer emp_id) throws DataNotFound {
+    public Map<String, String> deleteEmployee(Integer emp_id) throws DataNotFound, Exception {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
-
-        employeesRepo.delete(employee);
+        try {
+            employeesRepo.delete(employee);
+        } catch (Exception e) {
+            throw new Exception("Could not delete Employee with id : " + emp_id);
+        }
         Map<String, String> response = new HashMap<>();
         response.put("message", "Employee was deleted successfully");
-        return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
+        response.put("status_code", HttpStatus.OK.toString());
+        return response;
     }
 }
