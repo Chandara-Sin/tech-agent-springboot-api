@@ -22,11 +22,7 @@ public class EmployeeService {
 
     public Boolean checkDuplicateEmail(String value) {
         List<Employees> duplicate_email = employeesRepo.findByEmail(value);
-        if (!duplicate_email.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return !duplicate_email.isEmpty() ? true : false;
     }
 
     public Boolean validateGender(String value) {
@@ -48,13 +44,11 @@ public class EmployeeService {
 
     public Employees addEmployee(Employees datarequest) throws DataInvalid, Exception {
 
-        if (checkDuplicateEmail(datarequest.getEmail())) {
+        if (checkDuplicateEmail(datarequest.getEmail()))
             throw new DataInvalid("duplicate email");
-        }
 
-        if (!validateGender(datarequest.getGender())) {
+        if (!validateGender(datarequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
-        }
 
         // System.out.println(dataparam.getFirst_name());
         // System.out.println(dataparam.getLast_name());
@@ -94,13 +88,11 @@ public class EmployeeService {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
 
-        if (checkDuplicateEmail(employeeDetails.getEmail())) {
+        if (checkDuplicateEmail(employeeDetails.getEmail()))
             throw new DataInvalid("duplicate email");
-        }
 
-        if (!validateGender(employeeDetails.getGender())) {
+        if (!validateGender(employeeDetails.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
-        }
 
         employee.setFirst_name(employeeDetails.getFirst_name());
         employee.setLast_name(employeeDetails.getLast_name());
