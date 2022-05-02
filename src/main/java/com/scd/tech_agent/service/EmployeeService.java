@@ -20,20 +20,40 @@ public class EmployeeService {
     @Autowired
     EmployeesRepository employeesRepo;
 
+    public Boolean checkDuplicateEmail(String value) {
+        List<Employees> duplicate_email = employeesRepo.findByEmail(value);
+        if (!duplicate_email.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean validateGender(String value) {
+        Boolean is_valid = false;
+        for (Gender all_gender : Gender.values()) {
+            if (all_gender.toString() != value) {
+                is_valid = false;
+                break;
+            } else {
+                is_valid = true;
+            }
+        }
+        return is_valid;
+    }
+
     public List<Employees> getAllEmployees() {
         return employeesRepo.findAll();
     }
 
     public Employees addEmployee(Employees datarequest) throws DataInvalid, Exception {
-        List<Employees> duplicate_email = employeesRepo.findByEmail(datarequest.getEmail());
-        if (!duplicate_email.isEmpty()) {
+
+        if (checkDuplicateEmail(datarequest.getEmail())) {
             throw new DataInvalid("duplicate email");
         }
 
-        for (Gender all_gender : Gender.values()) {
-            if (all_gender.toString() != datarequest.getGender()) {
-                throw new DataInvalid("gender value : not_known, male, female, not_application");
-            }
+        if (!validateGender(datarequest.getGender())) {
+            throw new DataInvalid("gender value : not_known, male, female, not_application");
         }
 
         // System.out.println(dataparam.getFirst_name());
@@ -62,7 +82,6 @@ public class EmployeeService {
         // }
         //
 
-        // status.code == 201
         try {
             return employeesRepo.save(datarequest);
         } catch (Exception e) {
@@ -75,15 +94,12 @@ public class EmployeeService {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
 
-        List<Employees> duplicate_email = employeesRepo.findByEmail(employeeDetails.getEmail());
-        if (!duplicate_email.isEmpty()) {
+        if (checkDuplicateEmail(employeeDetails.getEmail())) {
             throw new DataInvalid("duplicate email");
         }
 
-        for (Gender all_gender : Gender.values()) {
-            if (all_gender.toString() != employeeDetails.getGender()) {
-                throw new DataInvalid("gender value : not_known, male, female, not_application");
-            }
+        if (!validateGender(employeeDetails.getGender())) {
+            throw new DataInvalid("gender value : not_known, male, female, not_application");
         }
 
         employee.setFirst_name(employeeDetails.getFirst_name());
