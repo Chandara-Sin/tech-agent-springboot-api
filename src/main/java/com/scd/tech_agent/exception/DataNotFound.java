@@ -1,4 +1,3 @@
-
 package com.scd.tech_agent.exception;
 
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,7 @@ public class DataNotFound extends Exception {
 
     // The serialVersionUID is a universal version identifier for a Serializable
     // class.
-    private static final long serialVersionUID = 1L;
+    // private static final long serialVersionUID = 1L;
 
     public DataNotFound(String message) {
         super(message);

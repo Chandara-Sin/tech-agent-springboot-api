@@ -6,14 +6,14 @@ public class ErrorDetails {
     private Date timestamp;
     private String message;
     private String path;
-    private int status;
+    private int status_code;
     private String error;
 
     public ErrorDetails(Date timestamp, String message, String path, int status, String error) {
         this.timestamp = timestamp;
         this.message = message;
         this.path = path;
-        this.status = status;
+        this.status_code = status;
         this.error = error;
     }
 
@@ -30,7 +30,7 @@ public class ErrorDetails {
     }
 
     public int getStatus() {
-        return status;
+        return status_code;
     }
 
     public String getError() {
