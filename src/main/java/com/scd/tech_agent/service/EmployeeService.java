@@ -8,7 +8,7 @@ import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.model.Employees;
 import com.scd.tech_agent.repository.EmployeesRepository;
-import com.scd.tech_agent.util.Gender;
+import com.scd.tech_agent.util.Helpers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,34 +20,21 @@ public class EmployeeService {
     @Autowired
     EmployeesRepository employeesRepo;
 
-    public Boolean checkDuplicateEmail(String value) {
-        List<Employees> duplicate_email = employeesRepo.findByEmail(value);
-        return !duplicate_email.isEmpty() ? true : false;
-    }
+    @Autowired
+    Helpers helpers;
 
-    public Boolean validateGender(String value) {
-        Boolean is_valid = false;
-        for (Gender all_gender : Gender.values()) {
-            if (all_gender.toString() != value) {
-                is_valid = false;
-                break;
-            } else {
-                is_valid = true;
-            }
+    public List<Employees> getAllEmployees() throws Exception {
+        try {
+            return employeesRepo.findAll();
+        } catch (Exception e) {
+            throw new Exception("Some error occurred while retrieving Employees");
         }
-        return is_valid;
-    }
-
-    public List<Employees> getAllEmployees() {
-        return employeesRepo.findAll();
     }
 
     public Employees addEmployee(Employees datarequest) throws DataInvalid, Exception {
-
-        if (checkDuplicateEmail(datarequest.getEmail()))
+        if (helpers.checkDuplicateEmail(datarequest.getEmail()))
             throw new DataInvalid("duplicate email");
-
-        if (!validateGender(datarequest.getGender()))
+        if (!helpers.validateGender(datarequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         // System.out.println(dataparam.getFirst_name());
@@ -70,11 +57,7 @@ public class EmployeeService {
         // System.out.print(employeesRepo.getNewEmployee());
         // Employees new_employee = employeesRepo.getNewEmployee();
         // return new_employee;
-        // } else {
-        // Employees new_employee = employeesRepo.getNewEmployee();
-        // return new_employee;
         // }
-        //
 
         try {
             return employeesRepo.save(datarequest);
@@ -88,10 +71,10 @@ public class EmployeeService {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
 
-        if (checkDuplicateEmail(employeeDetails.getEmail()))
+        if (helpers.checkDuplicateEmail(employeeDetails.getEmail()))
             throw new DataInvalid("duplicate email");
 
-        if (!validateGender(employeeDetails.getGender()))
+        if (!helpers.validateGender(employeeDetails.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         employee.setFirst_name(employeeDetails.getFirst_name());

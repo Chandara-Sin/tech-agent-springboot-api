@@ -23,7 +23,7 @@ public class EmployeesController {
     EmployeeService employeeServ;
 
     @GetMapping("/employees")
-    public ResponseEntity<List<Employees>> getAllEmployees() {
+    public ResponseEntity<List<Employees>> getAllEmployees() throws Exception {
         return new ResponseEntity<>(employeeServ.getAllEmployees(), HttpStatus.OK);
     }
 
