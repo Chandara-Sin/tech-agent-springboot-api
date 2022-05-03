@@ -31,6 +31,11 @@ public class EmployeeService {
         }
     }
 
+    public Employees getEmployeeById(Integer emp_id) throws DataNotFound {
+        return employeesRepo.findById(emp_id)
+                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
+    }
+
     public Employees addEmployee(Employees datarequest) throws DataInvalid, Exception {
         if (helpers.checkDuplicateEmail(datarequest.getEmail()))
             throw new DataInvalid("duplicate email");
@@ -54,7 +59,6 @@ public class EmployeeService {
         // hire_date, salr_id, dept_id,
         // postn_id);
         // if (is_success != 0) {
-        // System.out.print(employeesRepo.getNewEmployee());
         // Employees new_employee = employeesRepo.getNewEmployee();
         // return new_employee;
         // }
@@ -94,7 +98,7 @@ public class EmployeeService {
 
     }
 
-    public Map<String, String> deleteEmployee(Integer emp_id) throws DataNotFound, Exception {
+    public Map<String, String> deleteEmployee(Integer emp_id) throws Exception {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
         try {
@@ -107,4 +111,5 @@ public class EmployeeService {
         response.put("status_code", HttpStatus.OK.toString());
         return response;
     }
+
 }

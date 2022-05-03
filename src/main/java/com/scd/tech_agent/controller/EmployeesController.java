@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import com.scd.tech_agent.exception.DataInvalid;
-import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.model.Employees;
 import com.scd.tech_agent.service.EmployeeService;
 
@@ -27,6 +26,11 @@ public class EmployeesController {
         return new ResponseEntity<>(employeeServ.getAllEmployees(), HttpStatus.OK);
     }
 
+    @GetMapping("/employee/{id}")
+    public ResponseEntity<Employees> getEmployeeById(@PathVariable(value = "id") Integer emp_id) throws Exception {
+        return new ResponseEntity<>(employeeServ.getEmployeeById(emp_id), HttpStatus.OK);
+    }
+
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/employee")
     public ResponseEntity<Employees> addEmployee(@Valid @RequestBody Employees dataRequest)
@@ -37,13 +41,13 @@ public class EmployeesController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/employee/{id}")
     public ResponseEntity<Employees> updateEmployee(@PathVariable(value = "id") Integer emp_id,
-            @Valid @RequestBody Employees employeeDetails) throws DataNotFound, DataInvalid, Exception {
+            @Valid @RequestBody Employees employeeDetails) throws Exception {
         return new ResponseEntity<>(employeeServ.updateEmployee(emp_id, employeeDetails), HttpStatus.OK);
     }
 
     @DeleteMapping("/employee/{id}")
     public ResponseEntity<Map<String, String>> deleteEmployee(@PathVariable(value = "id") Integer emp_id)
-            throws DataNotFound, Exception {
+            throws Exception {
         return new ResponseEntity<>(employeeServ.deleteEmployee(emp_id), HttpStatus.OK);
     }
 
