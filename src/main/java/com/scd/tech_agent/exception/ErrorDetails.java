@@ -1,15 +1,18 @@
 package com.scd.tech_agent.exception;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ErrorDetails {
-    private Date timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private LocalDateTime timestamp;
     private String message;
     private String path;
     private int status_code;
     private String error;
 
-    public ErrorDetails(Date timestamp, String message, String path, int status, String error) {
+    public ErrorDetails(LocalDateTime timestamp, String message, String path, int status, String error) {
         this.timestamp = timestamp;
         this.message = message;
         this.path = path;
@@ -17,7 +20,7 @@ public class ErrorDetails {
         this.error = error;
     }
 
-    public Date getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 

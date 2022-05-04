@@ -25,9 +25,8 @@ public class Helpers {
             if (all_gender.toString() != value) {
                 is_valid = false;
                 break;
-            } else {
+            } else
                 is_valid = true;
-            }
         }
         return is_valid;
     }
