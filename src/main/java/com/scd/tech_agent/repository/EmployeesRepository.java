@@ -1,9 +1,5 @@
 package com.scd.tech_agent.repository;
 
-import java.util.List;
-
-// import java.util.List;
-
 import com.scd.tech_agent.model.Employees;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
 
-        List<Employees> findByEmail(String email);
+        Boolean existsByEmail(String email);
 
         // Wrap database operations in a transaction to prevent data corruption.
         // @Transactional

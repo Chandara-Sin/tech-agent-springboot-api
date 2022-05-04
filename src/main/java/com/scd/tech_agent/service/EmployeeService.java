@@ -37,7 +37,7 @@ public class EmployeeService {
     }
 
     public Employees addEmployee(Employees datarequest) throws DataInvalid, Exception {
-        if (helpers.checkDuplicateEmail(datarequest.getEmail()))
+        if (employeesRepo.existsByEmail(datarequest.getEmail()))
             throw new DataInvalid("duplicate email");
         if (!helpers.validateGender(datarequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
@@ -75,7 +75,7 @@ public class EmployeeService {
         Employees employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
 
-        if (helpers.checkDuplicateEmail(employeeDetails.getEmail()))
+        if (employeesRepo.existsByEmail(employeeDetails.getEmail()))
             throw new DataInvalid("duplicate email");
 
         if (!helpers.validateGender(employeeDetails.getGender()))
