@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.model.Employees;
 import com.scd.tech_agent.service.EmployeeService;
 
@@ -34,7 +33,7 @@ public class EmployeesController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/employee")
     public ResponseEntity<Employees> addEmployee(@Valid @RequestBody Employees dataRequest)
-            throws DataInvalid, Exception {
+            throws Exception {
         return new ResponseEntity<Employees>(employeeServ.addEmployee(dataRequest), HttpStatus.CREATED);
     }
 

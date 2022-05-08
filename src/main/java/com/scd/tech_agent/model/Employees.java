@@ -1,6 +1,9 @@
 package com.scd.tech_agent.model;
 
-// import org.hibernate.annotations.Type;
+import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 // import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
@@ -9,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "tb_employees")
 public class Employees {
 
-    private Integer emp_id;
+    private UUID id;
     private String first_name;
     private String last_name;
 
@@ -21,19 +24,21 @@ public class Employees {
     private String gender;
     private String email;
     private String hire_date;
-    private Integer salr_id;
     private Integer dept_id;
     private Integer postn_id;
 
     @Id
-    @GeneratedValue(generator = "emp_id", strategy = GenerationType.AUTO)
-    @Column(name = "emp_id")
-    public Integer getEmp_id() {
-        return emp_id;
+    // @GeneratedValue(generator = "emp_id", strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "id")
+    @GenericGenerator(name = "id", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
+    @Type(type = "uuid-char")
+    public UUID getId() {
+        return id;
     }
 
-    public void setEmp_id(Integer emp_id) {
-        this.emp_id = emp_id;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getFirst_name() {
@@ -76,14 +81,6 @@ public class Employees {
         this.hire_date = hire_date;
     }
 
-    public Integer getSalr_id() {
-        return salr_id;
-    }
-
-    public void setSalr_id(Integer salr_id) {
-        this.salr_id = salr_id;
-    }
-
     public Integer getDept_id() {
         return dept_id;
     }
@@ -103,16 +100,14 @@ public class Employees {
     @Override
     public String toString() {
         return "tb_employees{" +
-                "id=" + emp_id +
+                "id=" + id +
                 ", first_name='" + first_name +
                 ", last_name='" + last_name +
                 ", email='" + email +
                 ", gender=" + gender +
                 ", hire_date='" + hire_date +
-                ", salary_id=" + salr_id +
                 ", position_id=" + postn_id +
                 ", department_id=" + dept_id +
                 '}';
     }
-
 }
