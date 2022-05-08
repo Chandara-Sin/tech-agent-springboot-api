@@ -3,11 +3,12 @@ package com.scd.tech_agent.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
-import com.scd.tech_agent.model.Employees;
-import com.scd.tech_agent.repository.EmployeesRepository;
+import com.scd.tech_agent.model.Employee;
+import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.util.Helpers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     @Autowired
-    EmployeesRepository employeesRepo;
+    EmployeeRepository employeesRepo;
 
     @Autowired
     Helpers helpers;
 
-    public List<Employees> getAllEmployees() throws Exception {
+    public List<Employee> getAllEmployees() throws Exception {
         try {
             return employeesRepo.findAll();
         } catch (Exception e) {
@@ -31,12 +32,12 @@ public class EmployeeService {
         }
     }
 
-    public Employees getEmployeeById(Integer emp_id) throws DataNotFound {
+    public Employee getEmployeeById(UUID emp_id) throws DataNotFound {
         return employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
     }
 
-    public Employees addEmployee(Employees datarequest) throws Exception {
+    public Employee addEmployee(Employee datarequest) throws Exception {
         if (employeesRepo.existsByEmail(datarequest.getEmail()))
             throw new DataInvalid("duplicate email");
         if (!helpers.validateGender(datarequest.getGender()))
@@ -70,12 +71,12 @@ public class EmployeeService {
         }
     }
 
-    public Employees updateEmployee(Integer emp_id, Employees employeeDetails)
+    public Employee updateEmployee(UUID emp_id, Employee employeeDetails)
             throws Exception {
-        Employees employee = employeesRepo.findById(emp_id)
+        Employee employee = employeesRepo.findById(emp_id)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
 
-        if (employeesRepo.existsByEmail(employeeDetails.getEmail()))
+        if (employeesRepo.existsByEmailAndIdNot(employeeDetails.getEmail(), emp_id))
             throw new DataInvalid("duplicate email");
 
         if (!helpers.validateGender(employeeDetails.getGender()))
@@ -97,9 +98,10 @@ public class EmployeeService {
 
     }
 
-    public Map<String, String> deleteEmployee(Integer emp_id) throws Exception {
-        Employees employee = employeesRepo.findById(emp_id)
-                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
+    public Map<String, String> deleteEmployee(UUID emp_id) throws Exception {
+        Employee employee = employeesRepo.findById(emp_id).orElseThrow(
+                () -> new DataNotFound("Employee not found for this id : " + emp_id));
+
         try {
             employeesRepo.delete(employee);
         } catch (Exception e) {
