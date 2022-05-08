@@ -10,8 +10,6 @@ public class Helpers {
         for (Gender all_gender : Gender.values()) {
             if (all_gender.toString().equals(value)) {
                 is_valid = true;
-            } else {
-                is_valid = true;
                 break;
             }
         }
