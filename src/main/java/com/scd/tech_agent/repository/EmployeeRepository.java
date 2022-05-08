@@ -1,6 +1,9 @@
 package com.scd.tech_agent.repository;
 
-import com.scd.tech_agent.model.Employees;
+import java.util.Optional;
+import java.util.UUID;
+
+import com.scd.tech_agent.model.Employee;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 // import org.springframework.data.jpa.repository.Modifying;
@@ -10,9 +13,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployeesRepository extends JpaRepository<Employees, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
         Boolean existsByEmail(String email);
+
+        Optional<Employee> findById(UUID id);
+
+        Boolean existsByEmailAndIdNot(String email, UUID id);
 
         // Wrap database operations in a transaction to prevent data corruption.
         // @Transactional
