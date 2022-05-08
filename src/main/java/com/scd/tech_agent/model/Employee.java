@@ -1,16 +1,21 @@
 package com.scd.tech_agent.model;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 // import org.hibernate.annotations.TypeDef;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "tb_employees")
-public class Employees {
+public class Employee {
 
     private UUID id;
     private String first_name;
@@ -23,12 +28,16 @@ public class Employees {
     // "ENUM('not_known','male','female','not_application')")
     private String gender;
     private String email;
-    private String hire_date;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = ISO.DATE_TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime hire_date;
+
     private Integer dept_id;
     private Integer postn_id;
 
     @Id
-    // @GeneratedValue(generator = "emp_id", strategy = GenerationType.AUTO)
+    // @GeneratedValue(generator = "id", strategy = GenerationType.AUTO)
     @GeneratedValue(generator = "id")
     @GenericGenerator(name = "id", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
@@ -73,11 +82,11 @@ public class Employees {
         this.gender = gender;
     }
 
-    public String getHire_date() {
+    public LocalDateTime getHire_date() {
         return hire_date;
     }
 
-    public void setHire_date(String hire_date) {
+    public void setHire_date(LocalDateTime hire_date) {
         this.hire_date = hire_date;
     }
 
