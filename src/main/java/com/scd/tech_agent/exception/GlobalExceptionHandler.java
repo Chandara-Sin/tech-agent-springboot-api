@@ -14,14 +14,14 @@ public class GlobalExceptionHandler {
 
     // For Client Error
     @ExceptionHandler(DataNotFound.class)
-    public ResponseEntity<?> DataNotFoundException(DataNotFound ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorDetails> DataNotFoundException(DataNotFound ex, HttpServletRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getRequestURI(),
                 HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DataInvalid.class)
-    public ResponseEntity<?> DataDuplicateException(DataInvalid ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorDetails> DataDuplicateException(DataInvalid ex, HttpServletRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getRequestURI(),
                 HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
 
     // For Server Error
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> globleExcpetionHandler(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorDetails> globleExcpetionHandler(Exception ex, HttpServletRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
                 request.getRequestURI(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
