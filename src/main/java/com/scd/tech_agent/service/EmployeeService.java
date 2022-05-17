@@ -1,13 +1,13 @@
 package com.scd.tech_agent.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+import com.scd.tech_agent.entity.Department;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
-import com.scd.tech_agent.model.Employee;
+import com.scd.tech_agent.entity.Employee;
+import com.scd.tech_agent.model.EmployeeInfo;
+import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.util.Helpers;
 
@@ -22,90 +22,91 @@ public class EmployeeService {
     EmployeeRepository employeesRepo;
 
     @Autowired
+    DepartmentRepository departmentRepo;
+
+    @Autowired
     Helpers helpers;
 
-    public List<Employee> getAllEmployees() throws Exception {
-        try {
-            return employeesRepo.findAll();
-        } catch (Exception e) {
-            throw new Exception("Some error occurred while retrieving Employees");
-        }
+    public List<Employee> getEmployeeList() {
+        List<Employee> employeeList = employeesRepo.findAll();
+        if (employeeList.isEmpty()) {
+            throw new RuntimeException("Some error occurred while retrieving Employees");
+        }else return employeeList;
     }
 
-    public Employee getEmployeeById(UUID emp_id) throws DataNotFound {
-        return employeesRepo.findById(emp_id)
-                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
+    public Employee getEmployee(UUID empId) {
+        return employeesRepo.findById(empId)
+                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + empId));
     }
 
-    public Employee addEmployee(Employee datarequest) throws Exception {
-        if (employeesRepo.existsByEmail(datarequest.getEmail()))
+    public List<Employee> getEmployeeListByDepartment(Integer deptId) {
+        List<Employee> employeeList = employeesRepo.findAllByDeptId(deptId);
+        if (employeeList.isEmpty()) {
+            throw new DataNotFound("Employees Not Found with this department id : " + deptId);
+        } else return employeeList;
+    }
+
+    public Employee addEmployee(EmployeeInfo dataRequest) {
+        if (employeesRepo.existsByEmail(dataRequest.getEmail()))
             throw new DataInvalid("duplicate email");
-        if (!helpers.validateGender(datarequest.getGender()))
+        if (helpers.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
-        // System.out.println(dataparam.getFirst_name());
-        // System.out.println(dataparam.getLast_name());
-        // System.out.println(dataparam.getGender());
-        // System.out.println(dataparam.getHire_date());
-        // System.out.println(dataparam.getSalr_id());
-        // System.out.println(dataparam.getDept_id());
-        // String first_name = dataparam.getFirst_name();
-        // String last_name = dataparam.getLast_name();
-        // String gender = dataparam.getGender();
-        // String hire_date = dataparam.getHire_date();
-        // Integer salr_id = dataparam.getSalr_id();
-        // Integer dept_id = dataparam.getDept_id();
-        // Integer postn_id = dataparam.getPostn_id();
-        // Integer is_success = employeesRepo.addEmployee(first_name, last_name, gender,
-        // hire_date, salr_id, dept_id,
-        // postn_id);
-        // if (is_success != 0) {
-        // Employees new_employee = employeesRepo.getNewEmployee();
-        // return new_employee;
-        // }
+        Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
+                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), null, null)));
 
-        try {
-            return employeesRepo.save(datarequest);
-        } catch (Exception e) {
-            throw new Exception("Some error occurred while creating the Employee");
-        }
-    }
-
-    public Employee updateEmployee(UUID emp_id, Employee employeeDetails)
-            throws Exception {
-        Employee employee = employeesRepo.findById(emp_id)
-                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + emp_id));
-
-        if (employeesRepo.existsByEmailAndIdNot(employeeDetails.getEmail(), emp_id))
-            throw new DataInvalid("duplicate email");
-
-        if (!helpers.validateGender(employeeDetails.getGender()))
-            throw new DataInvalid("gender value : not_known, male, female, not_application");
-
-        employee.setFirst_name(employeeDetails.getFirst_name());
-        employee.setLast_name(employeeDetails.getLast_name());
-        employee.setEmail(employeeDetails.getEmail());
-        employee.setGender(employeeDetails.getGender());
-        employee.setHire_date(employeeDetails.getHire_date());
-        employee.setDept_id(employeeDetails.getDept_id());
-        employee.setPostn_id(employeeDetails.getPostn_id());
+        Employee employee = new Employee();
+        employee.setFirstName(dataRequest.getFirstName());
+        employee.setLastName(dataRequest.getLastName());
+        employee.setEmail(dataRequest.getEmail());
+        employee.setGender(dataRequest.getGender());
+        employee.setHireDate(dataRequest.getHireDate());
+        employee.setDeptId(department.getId());
+        employee.setPostnId(dataRequest.getPostnId());
 
         try {
             return employeesRepo.save(employee);
-        } catch (Exception e) {
-            throw new Exception("Some error occurred while updating the Employee");
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Some error occurred while creating the Employee");
         }
-
     }
 
-    public Map<String, String> deleteEmployee(UUID emp_id) throws Exception {
-        Employee employee = employeesRepo.findById(emp_id).orElseThrow(
-                () -> new DataNotFound("Employee not found for this id : " + emp_id));
+    public Employee updateEmployee(UUID empId, EmployeeInfo dataRequest) {
+        Employee employee = employeesRepo.findById(empId)
+                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + empId));
+
+        if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
+            throw new DataInvalid("duplicate email");
+
+        if (helpers.validateGender(dataRequest.getGender()))
+            throw new DataInvalid("gender value : not_known, male, female, not_application");
+
+        Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
+                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), null, null)));
+
+        employee.setFirstName(dataRequest.getFirstName());
+        employee.setLastName(dataRequest.getLastName());
+        employee.setEmail(dataRequest.getEmail());
+        employee.setGender(dataRequest.getGender());
+        employee.setHireDate(dataRequest.getHireDate());
+        employee.setDeptId(department.getId());
+        employee.setPostnId(dataRequest.getPostnId());
+
+        try {
+            return employeesRepo.save(employee);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Some error occurred while updating the Employee");
+        }
+    }
+
+    public Map<String, String> deleteEmployee(UUID empId) {
+        Employee employee = employeesRepo.findById(empId).orElseThrow(
+                () -> new DataNotFound("Employee not found for this id : " + empId));
 
         try {
             employeesRepo.delete(employee);
-        } catch (Exception e) {
-            throw new Exception("Could not delete Employee with id : " + emp_id);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Could not delete Employee with id : " + empId);
         }
         Map<String, String> response = new HashMap<>();
         response.put("message", "Employee was deleted successfully");

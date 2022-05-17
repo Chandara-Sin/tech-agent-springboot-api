@@ -1,9 +1,10 @@
 package com.scd.tech_agent.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.scd.tech_agent.model.Employee;
+import com.scd.tech_agent.entity.Employee;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 // import org.springframework.data.jpa.repository.Modifying;
@@ -20,6 +21,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
         Optional<Employee> findById(UUID id);
 
         Boolean existsByEmailAndIdNot(String email, UUID id);
+
+        List<Employee> findAllByDeptId(Integer deptId);
 
         // Wrap database operations in a transaction to prevent data corruption.
         // @Transactional

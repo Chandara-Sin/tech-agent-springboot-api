@@ -6,7 +6,8 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.scd.tech_agent.model.Employee;
+import com.scd.tech_agent.entity.Employee;
+import com.scd.tech_agent.model.EmployeeInfo;
 import com.scd.tech_agent.service.EmployeeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,44 +15,43 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/v1/employees")
+@RequestMapping("/api/v1")
 public class EmployeeController {
 
     @Autowired
     EmployeeService employeeServ;
 
-    @GetMapping("")
-    public ResponseEntity<List<Employee>> getAllEmployees() throws Exception {
-        return new ResponseEntity<>(employeeServ.getAllEmployees(), HttpStatus.OK);
+    @GetMapping("/employees")
+    public ResponseEntity<List<Employee>> getEmployeeList() {
+        return new ResponseEntity<>(employeeServ.getEmployeeList(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") String id) throws Exception {
-        UUID emp_id = UUID.fromString(id);
-        return new ResponseEntity<>(employeeServ.getEmployeeById(emp_id), HttpStatus.OK);
+    @GetMapping("/employees/{empId}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable(value = "empId") String empId) {
+        return new ResponseEntity<>(employeeServ.getEmployee(UUID.fromString(empId)), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("")
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee dataRequest)
-            throws Exception {
-        return new ResponseEntity<Employee>(employeeServ.addEmployee(dataRequest), HttpStatus.CREATED);
+    @GetMapping("/department/{deptId}/employees")
+    public ResponseEntity<List<Employee>> getEmployeeListByDepartment(@PathVariable(value = "deptId") Integer deptId) {
+        return new ResponseEntity<>(employeeServ.getEmployeeListByDepartment(deptId), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") String id,
-            @Valid @RequestBody Employee employeeDetails) throws Exception {
-        UUID emp_id = UUID.fromString(id);
-        return new ResponseEntity<>(employeeServ.updateEmployee(emp_id, employeeDetails), HttpStatus.OK);
+    @PostMapping("/employees")
+    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody EmployeeInfo dataRequest) {
+        return new ResponseEntity<>(employeeServ.addEmployee(dataRequest), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteEmployee(@PathVariable(value = "id") String id)
-            throws Exception {
-        UUID emp_id = UUID.fromString(id);
-        return new ResponseEntity<>(employeeServ.deleteEmployee(emp_id), HttpStatus.OK);
+    @PutMapping("/employees/{empId}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "empId") String empId,
+                                                   @Valid @RequestBody EmployeeInfo dataRequest) {
+        return new ResponseEntity<>(employeeServ.updateEmployee(UUID.fromString(empId), dataRequest), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{empId}")
+    public ResponseEntity<Map<String, String>> deleteEmployee(@PathVariable(value = "empId") String empId) {
+        return new ResponseEntity<>(employeeServ.deleteEmployee(UUID.fromString(empId)), HttpStatus.OK);
     }
 
 }
