@@ -13,6 +13,6 @@ public class Helpers {
                 break;
             }
         }
-        return isValid;
+        return !isValid;
     }
 }
