@@ -49,7 +49,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeServ.updateEmployee(UUID.fromString(empId), dataRequest), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{empId}")
+    @DeleteMapping("/employees/{empId}")
     public ResponseEntity<Map<String, String>> deleteEmployee(@PathVariable(value = "empId") String empId) {
         return new ResponseEntity<>(employeeServ.deleteEmployee(UUID.fromString(empId)), HttpStatus.OK);
     }

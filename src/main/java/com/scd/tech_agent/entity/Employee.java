@@ -58,4 +58,5 @@ public class Employee {
 
     @Column(name = "postn_id")
     private Integer postnId;
+
 }
