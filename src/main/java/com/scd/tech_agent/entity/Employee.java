@@ -56,6 +56,11 @@ public class Employee {
     @Column(name = "dept_id")
     private Integer deptId;
 
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "postn_id", nullable = false, updatable = false, insertable = false)
+//    @JsonIgnore
+//    private Position position;
+
     @Column(name = "postn_id")
     private Integer postnId;
 

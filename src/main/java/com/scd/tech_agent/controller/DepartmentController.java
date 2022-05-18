@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/departments")
 public class DepartmentController {
@@ -25,7 +26,6 @@ public class DepartmentController {
 
     @PostMapping("")
     public ResponseEntity<Department> addDepartment(@Valid @RequestBody Department dataRequest) {
-        System.out.println(dataRequest);
         return new ResponseEntity<>(departmentServ.addDepartment(dataRequest), HttpStatus.CREATED);
     }
 
