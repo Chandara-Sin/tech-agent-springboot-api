@@ -6,7 +6,9 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 // import org.hibernate.annotations.TypeDef;
@@ -25,7 +27,7 @@ public class Employee {
 
     @Id
     @GeneratedValue(generator = "id")
-    @GenericGenerator(name = "id", strategy = "org.hibernate.id.UUIDGenerator")
+    @GenericGenerator(name = "uuid-generator", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
     @Type(type = "uuid-char")
     private UUID id;
@@ -48,7 +50,7 @@ public class Employee {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime hireDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "dept_id", nullable = false, updatable = false, insertable = false)
     @JsonIgnore
     private Department department;
@@ -56,7 +58,7 @@ public class Employee {
     @Column(name = "dept_id")
     private Integer deptId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "postn_id", nullable = false, updatable = false, insertable = false)
     @JsonIgnore
     private Position position;

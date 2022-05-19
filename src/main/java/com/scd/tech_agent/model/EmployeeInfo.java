@@ -23,5 +23,5 @@ public class EmployeeInfo {
     private LocalDateTime hireDate;
 
     private String deptName;
-    private Integer postnId;
+    private String position;
 }

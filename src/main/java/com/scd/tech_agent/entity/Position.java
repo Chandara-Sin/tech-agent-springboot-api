@@ -7,7 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @ToString
 @Getter
@@ -19,7 +18,7 @@ import java.util.UUID;
 public class Position {
 
     @Id
-    @GeneratedValue(generator = "postn_id", strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String position;
@@ -34,7 +33,7 @@ public class Position {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "dept_id", nullable = false, updatable = false, insertable = false)
     @JsonIgnore
     private Department department;
