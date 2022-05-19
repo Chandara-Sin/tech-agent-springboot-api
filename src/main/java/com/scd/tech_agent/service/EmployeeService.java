@@ -1,14 +1,17 @@
 package com.scd.tech_agent.service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import com.scd.tech_agent.entity.Department;
+import com.scd.tech_agent.entity.Position;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Employee;
 import com.scd.tech_agent.model.EmployeeInfo;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
+import com.scd.tech_agent.repository.PositionRepository;
 import com.scd.tech_agent.util.Helpers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class EmployeeService {
 
     @Autowired
     DepartmentRepository departmentRepo;
+
+    @Autowired
+    PositionRepository positionRepo;
 
     @Autowired
     Helpers helpers;
@@ -46,6 +52,13 @@ public class EmployeeService {
         } else return employeeList;
     }
 
+    public List<Employee> getEmployeeListByPosition(Integer postnId) {
+        List<Employee> employeeList = employeesRepo.findAllByPostnId(postnId);
+        if (employeeList.isEmpty()) {
+            throw new DataNotFound("Employees Not Found with this position id : " + postnId);
+        } else return employeeList;
+    }
+
     public Employee addEmployee(EmployeeInfo dataRequest) {
         if (employeesRepo.existsByEmail(dataRequest.getEmail()))
             throw new DataInvalid("duplicate email");
@@ -53,7 +66,10 @@ public class EmployeeService {
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
-                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), null, null)));
+                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), LocalDateTime.now(), LocalDateTime.now())));
+
+        Position position = positionRepo.findByPosition(dataRequest.getPosition())
+                .orElseGet(() -> positionRepo.save(new Position(null,dataRequest.getPosition(),LocalDateTime.now(),LocalDateTime.now(),department,department.getId())));
 
         Employee employee = new Employee();
         employee.setFirstName(dataRequest.getFirstName());
@@ -62,7 +78,7 @@ public class EmployeeService {
         employee.setGender(dataRequest.getGender());
         employee.setHireDate(dataRequest.getHireDate());
         employee.setDeptId(department.getId());
-        employee.setPostnId(dataRequest.getPostnId());
+        employee.setPostnId(position.getId());
 
         try {
             return employeesRepo.save(employee);
@@ -84,13 +100,16 @@ public class EmployeeService {
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
                 .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), null, null)));
 
+        Position position = positionRepo.findByPosition(dataRequest.getPosition())
+                .orElseGet(() -> positionRepo.save(new Position(null,dataRequest.getPosition(),null,null,department,department.getId())));
+
         employee.setFirstName(dataRequest.getFirstName());
         employee.setLastName(dataRequest.getLastName());
         employee.setEmail(dataRequest.getEmail());
         employee.setGender(dataRequest.getGender());
         employee.setHireDate(dataRequest.getHireDate());
         employee.setDeptId(department.getId());
-        employee.setPostnId(dataRequest.getPostnId());
+        employee.setPostnId(position.getId());
 
         try {
             return employeesRepo.save(employee);

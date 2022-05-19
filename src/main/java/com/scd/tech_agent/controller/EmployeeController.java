@@ -38,6 +38,11 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeServ.getEmployeeListByDepartment(deptId), HttpStatus.OK);
     }
 
+    @GetMapping("/position/{postnId}/employees")
+    public ResponseEntity<List<Employee>> getEmployeeListByPosition(@PathVariable(value = "postnId") Integer postnId) {
+        return new ResponseEntity<>(employeeServ.getEmployeeListByPosition(postnId), HttpStatus.OK);
+    }
+
     @PostMapping("/employees")
     public ResponseEntity<Employee> addEmployee(@Valid @RequestBody EmployeeInfo dataRequest) {
         return new ResponseEntity<>(employeeServ.addEmployee(dataRequest), HttpStatus.CREATED);

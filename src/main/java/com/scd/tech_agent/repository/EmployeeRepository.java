@@ -24,6 +24,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
         List<Employee> findAllByDeptId(Integer deptId);
 
+        List<Employee> findAllByPostnId(Integer postnId);
+
         // Wrap database operations in a transaction to prevent data corruption.
         // @Transactional
         // @Modifying
