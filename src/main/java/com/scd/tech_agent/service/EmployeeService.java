@@ -98,10 +98,10 @@ public class EmployeeService {
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
-                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), null, null)));
+                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(),  LocalDateTime.now(),  LocalDateTime.now())));
 
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
-                .orElseGet(() -> positionRepo.save(new Position(null,dataRequest.getPosition(),null,null,department,department.getId())));
+                .orElseGet(() -> positionRepo.save(new Position(null,dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(),department,department.getId())));
 
         employee.setFirstName(dataRequest.getFirstName());
         employee.setLastName(dataRequest.getLastName());
