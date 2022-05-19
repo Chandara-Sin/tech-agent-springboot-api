@@ -14,6 +14,8 @@ public interface PositionRepository extends JpaRepository<Position, Integer> {
 
     boolean existsByPosition(String position);
 
+    boolean existsByPositionAndIdNot(String position, Integer postnId);
+
     List<Position> findAllByDeptId(Integer deptId);
 
     Optional<Position> findByPosition(String position);

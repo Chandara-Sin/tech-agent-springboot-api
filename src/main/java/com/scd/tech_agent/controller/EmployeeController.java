@@ -33,12 +33,12 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeServ.getEmployee(UUID.fromString(empId)), HttpStatus.OK);
     }
 
-    @GetMapping("/department/{deptId}/employees")
+    @GetMapping("/departments/{deptId}/employees")
     public ResponseEntity<List<Employee>> getEmployeeListByDepartment(@PathVariable(value = "deptId") Integer deptId) {
         return new ResponseEntity<>(employeeServ.getEmployeeListByDepartment(deptId), HttpStatus.OK);
     }
 
-    @GetMapping("/position/{postnId}/employees")
+    @GetMapping("/positions/{postnId}/employees")
     public ResponseEntity<List<Employee>> getEmployeeListByPosition(@PathVariable(value = "postnId") Integer postnId) {
         return new ResponseEntity<>(employeeServ.getEmployeeListByPosition(postnId), HttpStatus.OK);
     }
