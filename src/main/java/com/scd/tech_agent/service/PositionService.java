@@ -38,6 +38,9 @@ public class PositionService {
     }
 
     public Position addPosition(Position dataRequest) {
+        if (positionRepo.existsByPosition(dataRequest.getPosition()))
+            throw new DataInvalid("duplicate position");
+        
         Position position = new Position();
         position.setPosition(dataRequest.getPosition());
         position.setDeptId(dataRequest.getDeptId());
@@ -54,7 +57,7 @@ public class PositionService {
         Position position = positionRepo.findById(postnId)
                 .orElseThrow(() -> new DataNotFound("Position not found for this id : " + postnId));
 
-        if (positionRepo.existsByPosition(dataRequest.getPosition()))
+        if (positionRepo.existsByPositionAndIdNot(dataRequest.getPosition(), postnId))
             throw new DataInvalid("duplicate position name");
 
         if (!departmentRepo.existsById(dataRequest.getDeptId()))

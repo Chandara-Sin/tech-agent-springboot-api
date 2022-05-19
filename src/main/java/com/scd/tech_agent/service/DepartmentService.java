@@ -28,6 +28,9 @@ public class DepartmentService {
     }
 
     public Department addDepartment(Department dataRequest) {
+        if (departmentRepo.existsByDeptName(dataRequest.getDeptName()))
+            throw new DataInvalid("duplicate department");
+
         Department department = new Department();
         department.setDeptName(dataRequest.getDeptName());
         department.setCreatedAt(LocalDateTime.now());
