@@ -37,7 +37,7 @@ public class EmployeeService {
         List<Employee> employeeList = employeesRepo.findAll();
         if (employeeList.isEmpty()) {
             throw new RuntimeException("Some error occurred while retrieving Employees");
-        }else return employeeList;
+        } else return employeeList;
     }
 
     public Employee getEmployee(UUID empId) {
@@ -69,7 +69,7 @@ public class EmployeeService {
                 .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), LocalDateTime.now(), LocalDateTime.now())));
 
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
-                .orElseGet(() -> positionRepo.save(new Position(null,dataRequest.getPosition(),LocalDateTime.now(),LocalDateTime.now(),department,department.getId())));
+                .orElseGet(() -> positionRepo.save(new Position(null, dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(), department, department.getId())));
 
         Employee employee = new Employee();
         employee.setFirstName(dataRequest.getFirstName());
@@ -98,10 +98,10 @@ public class EmployeeService {
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
-                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(),  LocalDateTime.now(),  LocalDateTime.now())));
+                .orElseGet(() -> departmentRepo.save(new Department(null, dataRequest.getDeptName(), LocalDateTime.now(), LocalDateTime.now())));
 
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
-                .orElseGet(() -> positionRepo.save(new Position(null,dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(),department,department.getId())));
+                .orElseGet(() -> positionRepo.save(new Position(null, dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(), department, department.getId())));
 
         employee.setFirstName(dataRequest.getFirstName());
         employee.setLastName(dataRequest.getLastName());
@@ -119,8 +119,8 @@ public class EmployeeService {
     }
 
     public Map<String, String> deleteEmployee(UUID empId) {
-        Employee employee = employeesRepo.findById(empId).orElseThrow(
-                () -> new DataNotFound("Employee not found for this id : " + empId));
+        Employee employee = employeesRepo.findById(empId)
+                .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + empId));
 
         try {
             employeesRepo.delete(employee);
