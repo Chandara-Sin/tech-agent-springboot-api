@@ -61,8 +61,8 @@ public class DepartmentService {
     }
 
     public Map<String, String> deleteDepartment(Integer deptId) {
-        Department department = departmentRepo.findById(deptId).orElseThrow(
-                () -> new DataNotFound("Department not found for this id : " + deptId));
+        Department department = departmentRepo.findById(deptId)
+                .orElseThrow(() -> new DataNotFound("Department not found for this id : " + deptId));
 
         try {
             departmentRepo.delete(department);

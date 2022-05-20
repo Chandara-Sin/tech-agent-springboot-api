@@ -40,7 +40,7 @@ public class PositionService {
     public Position addPosition(Position dataRequest) {
         if (positionRepo.existsByPosition(dataRequest.getPosition()))
             throw new DataInvalid("duplicate position");
-        
+
         Position position = new Position();
         position.setPosition(dataRequest.getPosition());
         position.setDeptId(dataRequest.getDeptId());
@@ -76,8 +76,8 @@ public class PositionService {
     }
 
     public Map<String, String> deletePosition(Integer postnId) {
-        Position position = positionRepo.findById(postnId).orElseThrow(
-                () -> new DataNotFound("Position not found for this id : " + postnId));
+        Position position = positionRepo.findById(postnId)
+                .orElseThrow(() -> new DataNotFound("Position not found for this id : " + postnId));
 
         try {
             positionRepo.delete(position);
