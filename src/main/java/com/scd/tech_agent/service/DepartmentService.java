@@ -21,10 +21,14 @@ public class DepartmentService {
     DepartmentRepository departmentRepo;
 
     public List<Department> getDepartmentList() {
-        List<Department> departmentList = departmentRepo.findAll();
-        if (departmentList.isEmpty()) {
+        try {
+            List<Department> departmentList = departmentRepo.findAll();
+            if (departmentList.isEmpty()) {
+                throw new DataNotFound("Found no Departments in Database");
+            } else return departmentList;
+        } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while retrieving Departments");
-        } else return departmentList;
+        }
     }
 
     public Department addDepartment(Department dataRequest) {

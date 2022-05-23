@@ -24,10 +24,14 @@ public class PositionService {
     DepartmentRepository departmentRepo;
 
     public List<Position> getPositionList() {
-        List<Position> positionList = positionRepo.findAll();
-        if (positionList.isEmpty()) {
+        try {
+            List<Position> positionList = positionRepo.findAll();
+            if (positionList.isEmpty()) {
+                throw new DataNotFound("Found no Positions in Database");
+            } else return positionList;
+        } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while retrieving Positions");
-        } else return positionList;
+        }
     }
 
     public List<Position> getPositionListByDepartment(Integer deptId) {
