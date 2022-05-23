@@ -34,10 +34,14 @@ public class EmployeeService {
     Helpers helpers;
 
     public List<Employee> getEmployeeList() {
-        List<Employee> employeeList = employeesRepo.findAll();
-        if (employeeList.isEmpty()) {
-            throw new RuntimeException("Some error occurred while retrieving Employees");
-        } else return employeeList;
+        try {
+            List<Employee> employeeList = employeesRepo.findAll();
+            if (employeeList.isEmpty()) {
+                throw new DataNotFound("Found no Employees in database");
+            } else return employeeList;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Some error occurred while retrieving the Employee");
+        }
     }
 
     public Employee getEmployee(UUID empId) {
@@ -46,17 +50,25 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeeListByDepartment(Integer deptId) {
-        List<Employee> employeeList = employeesRepo.findAllByDeptId(deptId);
-        if (employeeList.isEmpty()) {
-            throw new DataNotFound("Employees Not Found with this department id : " + deptId);
-        } else return employeeList;
+        try {
+            List<Employee> employeeList = employeesRepo.findAllByDeptId(deptId);
+            if (employeeList.isEmpty()) {
+                throw new DataNotFound("Employees Not Found with this department id : " + deptId);
+            } else return employeeList;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Some error occurred while retrieving the Employee");
+        }
     }
 
     public List<Employee> getEmployeeListByPosition(Integer postnId) {
-        List<Employee> employeeList = employeesRepo.findAllByPostnId(postnId);
-        if (employeeList.isEmpty()) {
-            throw new DataNotFound("Employees Not Found with this position id : " + postnId);
-        } else return employeeList;
+        try {
+            List<Employee> employeeList = employeesRepo.findAllByPostnId(postnId);
+            if (employeeList.isEmpty()) {
+                throw new DataNotFound("Employees Not Found with this position id : " + postnId);
+            } else return employeeList;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Some error occurred while retrieving the Employee");
+        }
     }
 
     public Employee addEmployee(EmployeeInfo dataRequest) {
