@@ -8,7 +8,8 @@ import com.scd.tech_agent.entity.Position;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.EmployeeInfo;
+import com.scd.tech_agent.model.Dto.EmployeeDto;
+import com.scd.tech_agent.model.mapper.EmployeeMapper;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.repository.PositionRepository;
@@ -25,6 +26,7 @@ public class EmployeeService {
     final EmployeeRepository employeesRepo;
     final DepartmentRepository departmentRepo;
     final PositionRepository positionRepo;
+    final EmployeeMapper employeeMapper;
 
     public List<Employee> getEmployeeList() {
         try {
@@ -64,7 +66,7 @@ public class EmployeeService {
         }
     }
 
-    public Employee addEmployee(EmployeeInfo dataRequest) {
+    public Employee addEmployee(EmployeeDto dataRequest) {
         if (employeesRepo.existsByEmail(dataRequest.getEmail()))
             throw new DataInvalid("duplicate email");
         if (HelperUtils.validateGender(dataRequest.getGender()))
@@ -76,12 +78,8 @@ public class EmployeeService {
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
                 .orElseGet(() -> positionRepo.save(new Position(null, dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(), department, department.getId())));
 
-        Employee employee = new Employee();
-        employee.setFirstName(dataRequest.getFirstName());
-        employee.setLastName(dataRequest.getLastName());
-        employee.setEmail(dataRequest.getEmail());
-        employee.setGender(dataRequest.getGender());
-        employee.setHireDate(dataRequest.getHireDate());
+        var employee = employeeMapper.toEmployee(dataRequest);
+
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 
@@ -92,8 +90,8 @@ public class EmployeeService {
         }
     }
 
-    public Employee updateEmployee(UUID empId, EmployeeInfo dataRequest) {
-        Employee employee = employeesRepo.findById(empId)
+    public Employee updateEmployee(UUID empId, EmployeeDto dataRequest) {
+        Employee employeeById = employeesRepo.findById(empId)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + empId));
 
         if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
@@ -108,11 +106,8 @@ public class EmployeeService {
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
                 .orElseGet(() -> positionRepo.save(new Position(null, dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(), department, department.getId())));
 
-        employee.setFirstName(dataRequest.getFirstName());
-        employee.setLastName(dataRequest.getLastName());
-        employee.setEmail(dataRequest.getEmail());
-        employee.setGender(dataRequest.getGender());
-        employee.setHireDate(dataRequest.getHireDate());
+        var employee = employeeMapper.toEmployee(dataRequest);
+        employee.setId(employeeById.getId());
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 
