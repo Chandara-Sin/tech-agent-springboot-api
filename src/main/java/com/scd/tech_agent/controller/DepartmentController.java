@@ -2,7 +2,7 @@ package com.scd.tech_agent.controller;
 
 import com.scd.tech_agent.entity.Department;
 import com.scd.tech_agent.service.DepartmentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +11,13 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/departments")
 public class DepartmentController {
 
-    @Autowired
-    DepartmentService departmentServ;
+    final DepartmentService departmentServ;
 
     @GetMapping("")
     public ResponseEntity<List<Department>> getDepartmentList() {

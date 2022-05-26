@@ -10,18 +10,18 @@ import com.scd.tech_agent.entity.Employee;
 import com.scd.tech_agent.model.EmployeeInfo;
 import com.scd.tech_agent.service.EmployeeService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class EmployeeController {
 
-    @Autowired
-    EmployeeService employeeServ;
+    final EmployeeService employeeServ;
 
     @GetMapping("/employees")
     public ResponseEntity<List<Employee>> getEmployeeList() {

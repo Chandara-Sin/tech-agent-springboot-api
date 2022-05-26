@@ -12,26 +12,19 @@ import com.scd.tech_agent.model.EmployeeInfo;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.repository.PositionRepository;
-import com.scd.tech_agent.util.Helpers;
+import com.scd.tech_agent.util.HelperUtils;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class EmployeeService {
 
-    @Autowired
-    EmployeeRepository employeesRepo;
-
-    @Autowired
-    DepartmentRepository departmentRepo;
-
-    @Autowired
-    PositionRepository positionRepo;
-
-    @Autowired
-    Helpers helpers;
+    final EmployeeRepository employeesRepo;
+    final DepartmentRepository departmentRepo;
+    final PositionRepository positionRepo;
 
     public List<Employee> getEmployeeList() {
         try {
@@ -74,7 +67,7 @@ public class EmployeeService {
     public Employee addEmployee(EmployeeInfo dataRequest) {
         if (employeesRepo.existsByEmail(dataRequest.getEmail()))
             throw new DataInvalid("duplicate email");
-        if (helpers.validateGender(dataRequest.getGender()))
+        if (HelperUtils.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
@@ -106,7 +99,7 @@ public class EmployeeService {
         if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
             throw new DataInvalid("duplicate email");
 
-        if (helpers.validateGender(dataRequest.getGender()))
+        if (HelperUtils.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
