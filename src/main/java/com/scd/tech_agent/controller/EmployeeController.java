@@ -7,7 +7,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.Dto.EmployeeDto;
+import com.scd.tech_agent.model.dto.EmployeeDto;
 import com.scd.tech_agent.service.EmployeeService;
 
 import lombok.AllArgsConstructor;

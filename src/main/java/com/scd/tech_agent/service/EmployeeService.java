@@ -8,7 +8,7 @@ import com.scd.tech_agent.entity.Position;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.Dto.EmployeeDto;
+import com.scd.tech_agent.model.dto.EmployeeDto;
 import com.scd.tech_agent.model.mapper.EmployeeMapper;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;

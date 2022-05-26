@@ -1,4 +1,4 @@
-package com.scd.tech_agent.model.Dto;
+package com.scd.tech_agent.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
