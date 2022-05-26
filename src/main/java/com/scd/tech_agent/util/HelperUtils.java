@@ -1,11 +1,8 @@
 package com.scd.tech_agent.util;
 
-import org.springframework.stereotype.Component;
+public class HelperUtils {
 
-@Component
-public class Helpers {
-
-    public boolean validateGender(String gender) {
+    public static boolean validateGender(String gender) {
         boolean isValid = false;
         for (Gender genders : Gender.values()) {
             if (genders.toString().equals(gender)) {

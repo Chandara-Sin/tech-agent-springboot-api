@@ -1,11 +1,10 @@
 package com.scd.tech_agent.service;
 
-import com.scd.tech_agent.entity.Employee;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Department;
 import com.scd.tech_agent.repository.DepartmentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @Service
 public class DepartmentService {
 
-    @Autowired
-    DepartmentRepository departmentRepo;
+    final DepartmentRepository departmentRepo;
 
     public List<Department> getDepartmentList() {
         try {

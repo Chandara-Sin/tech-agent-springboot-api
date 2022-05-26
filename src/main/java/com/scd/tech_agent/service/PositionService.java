@@ -5,7 +5,7 @@ import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.PositionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @Service
 public class PositionService {
 
-    @Autowired
-    PositionRepository positionRepo;
-
-    @Autowired
-    DepartmentRepository departmentRepo;
+    final PositionRepository positionRepo;
+    final DepartmentRepository departmentRepo;
 
     public List<Position> getPositionList() {
         try {
