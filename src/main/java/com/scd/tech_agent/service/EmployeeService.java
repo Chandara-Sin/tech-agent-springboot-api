@@ -13,20 +13,14 @@ import com.scd.tech_agent.model.mapper.EmployeeMapper;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.repository.PositionRepository;
-import com.scd.tech_agent.util.HelperUtils;
+import com.scd.tech_agent.util.HelpersUtil;
 
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
 @Service
-public class EmployeeService {
-
-    final EmployeeRepository employeesRepo;
-    final DepartmentRepository departmentRepo;
-    final PositionRepository positionRepo;
-    final EmployeeMapper employeeMapper;
+public record EmployeeService(EmployeeRepository employeesRepo, DepartmentRepository departmentRepo,
+                              PositionRepository positionRepo, EmployeeMapper employeeMapper) {
 
     public List<Employee> getEmployeeList() {
         try {
@@ -69,7 +63,7 @@ public class EmployeeService {
     public Employee addEmployee(EmployeeDto dataRequest) {
         if (employeesRepo.existsByEmail(dataRequest.getEmail()))
             throw new DataInvalid("duplicate email");
-        if (HelperUtils.validateGender(dataRequest.getGender()))
+        if (HelpersUtil.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
@@ -97,7 +91,7 @@ public class EmployeeService {
         if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
             throw new DataInvalid("duplicate email");
 
-        if (HelperUtils.validateGender(dataRequest.getGender()))
+        if (HelpersUtil.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
         Department department = departmentRepo.findByDeptName(dataRequest.getDeptName())
