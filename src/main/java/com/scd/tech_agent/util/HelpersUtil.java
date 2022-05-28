@@ -1,6 +1,6 @@
 package com.scd.tech_agent.util;
 
-public class HelperUtils {
+public class HelpersUtil {
 
     public static boolean validateGender(String gender) {
         boolean isValid = false;
