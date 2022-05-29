@@ -8,8 +8,7 @@ import com.scd.tech_agent.entity.Position;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.dto.EmployeeDto;
-import com.scd.tech_agent.model.mapper.EmployeeMapper;
+import com.scd.tech_agent.model.EmployeeInfo;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.repository.PositionRepository;
@@ -20,17 +19,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public record EmployeeService(EmployeeRepository employeesRepo, DepartmentRepository departmentRepo,
-                              PositionRepository positionRepo, EmployeeMapper employeeMapper) {
+                              PositionRepository positionRepo) {
 
     public List<Employee> getEmployeeList() {
+        List<Employee> employeeList;
         try {
-            List<Employee> employeeList = employeesRepo.findAll();
-            if (employeeList.isEmpty()) {
-                throw new DataNotFound("Found no Employees in database");
-            } else return employeeList;
+            employeeList = employeesRepo.findAll();
         } catch (RuntimeException e) {
-            throw new RuntimeException("Some error occurred while retrieving the Employee");
+            throw new RuntimeException("Some error occurred while retrieving the Employee", e);
         }
+        if (employeeList.isEmpty())
+            throw new DataNotFound("Found no Employees in database");
+        return employeeList;
     }
 
     public Employee getEmployee(UUID empId) {
@@ -39,28 +39,30 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
     }
 
     public List<Employee> getEmployeeListByDepartment(Integer deptId) {
+        List<Employee> employeeList;
         try {
-            List<Employee> employeeList = employeesRepo.findAllByDeptId(deptId);
-            if (employeeList.isEmpty()) {
-                throw new DataNotFound("Employees Not Found with this department id : " + deptId);
-            } else return employeeList;
+            employeeList = employeesRepo.findAllByDeptId(deptId);
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while retrieving the Employee");
         }
+        if (employeeList.isEmpty())
+            throw new DataNotFound("Employees Not Found with this department id : " + deptId);
+        return employeeList;
     }
 
     public List<Employee> getEmployeeListByPosition(Integer postnId) {
+        List<Employee> employeeList;
         try {
-            List<Employee> employeeList = employeesRepo.findAllByPostnId(postnId);
-            if (employeeList.isEmpty()) {
-                throw new DataNotFound("Employees Not Found with this position id : " + postnId);
-            } else return employeeList;
+            employeeList = employeesRepo.findAllByPostnId(postnId);
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while retrieving the Employee");
         }
+        if (employeeList.isEmpty())
+            throw new DataNotFound("Employees Not Found with this position id : " + postnId);
+        return employeeList;
     }
 
-    public Employee addEmployee(EmployeeDto dataRequest) {
+    public Employee addEmployee(EmployeeInfo dataRequest) {
         if (employeesRepo.existsByEmail(dataRequest.getEmail()))
             throw new DataInvalid("duplicate email");
         if (HelpersUtil.validateGender(dataRequest.getGender()))
@@ -72,8 +74,12 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
                 .orElseGet(() -> positionRepo.save(new Position(null, dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(), department, department.getId())));
 
-        var employee = employeeMapper.toEmployee(dataRequest);
-
+        Employee employee = new Employee();
+        employee.setFirstName(dataRequest.getFirstName());
+        employee.setLastName(dataRequest.getLastName());
+        employee.setEmail(dataRequest.getEmail());
+        employee.setGender(dataRequest.getGender());
+        employee.setHireDate(LocalDateTime.parse(dataRequest.getHireDate()));
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 
@@ -84,8 +90,8 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         }
     }
 
-    public Employee updateEmployee(UUID empId, EmployeeDto dataRequest) {
-        Employee employeeById = employeesRepo.findById(empId)
+    public Employee updateEmployee(UUID empId, EmployeeInfo dataRequest) {
+        Employee employee = employeesRepo.findById(empId)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + empId));
 
         if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
@@ -100,8 +106,11 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         Position position = positionRepo.findByPosition(dataRequest.getPosition())
                 .orElseGet(() -> positionRepo.save(new Position(null, dataRequest.getPosition(), LocalDateTime.now(), LocalDateTime.now(), department, department.getId())));
 
-        var employee = employeeMapper.toEmployee(dataRequest);
-        employee.setId(employeeById.getId());
+        employee.setFirstName(dataRequest.getFirstName());
+        employee.setLastName(dataRequest.getLastName());
+        employee.setEmail(dataRequest.getEmail());
+        employee.setGender(dataRequest.getGender());
+        employee.setHireDate(LocalDateTime.parse(dataRequest.getHireDate()));
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 

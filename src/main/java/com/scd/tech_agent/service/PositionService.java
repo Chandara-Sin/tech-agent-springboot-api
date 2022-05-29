@@ -5,7 +5,6 @@ import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.PositionRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,42 +13,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AllArgsConstructor
 @Service
-public class PositionService {
-
-    final PositionRepository positionRepo;
-    final DepartmentRepository departmentRepo;
+public record PositionService(PositionRepository positionRepo, DepartmentRepository departmentRepo) {
 
     public List<Position> getPositionList() {
+        List<Position> positionList;
         try {
-            List<Position> positionList = positionRepo.findAll();
-            if (positionList.isEmpty()) {
-                throw new DataNotFound("Found no Positions in Database");
-            } else return positionList;
+            positionList = positionRepo.findAll();
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while retrieving Positions");
         }
+        if (positionList.isEmpty())
+            throw new DataNotFound("Found no Positions in Database");
+        return positionList;
     }
 
     public List<Position> getPositionListByDepartment(Integer deptId) {
-        List<Position> positionList = positionRepo.findAllByDeptId(deptId);
-        if (positionList.isEmpty()) {
+        List<Position> positionList;
+        try {
+            positionList = positionRepo.findAllByDeptId(deptId);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Some error occurred while retrieving Positions");
+        }
+        if (positionList.isEmpty())
             throw new DataNotFound("Positions Not Found with this department id : " + deptId);
-        } else return positionList;
+        return positionList;
     }
 
     public Position addPosition(Position dataRequest) {
         if (positionRepo.existsByPosition(dataRequest.getPosition()))
             throw new DataInvalid("duplicate position");
 
-        Position position = new Position();
-        position.setPosition(dataRequest.getPosition());
-        position.setDeptId(dataRequest.getDeptId());
-        position.setCreatedAt(LocalDateTime.now());
-        position.setUpdatedAt(LocalDateTime.now());
+        dataRequest.setCreatedAt(LocalDateTime.now());
+        dataRequest.setUpdatedAt(LocalDateTime.now());
         try {
-            return positionRepo.save(position);
+            return positionRepo.save(dataRequest);
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while creating the Position");
         }
