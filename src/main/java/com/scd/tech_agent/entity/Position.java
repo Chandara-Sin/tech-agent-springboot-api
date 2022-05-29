@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -40,4 +39,14 @@ public class Position {
 
     @Column(name = "dept_id")
     private Integer deptId;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "position = " + position + ", " +
+                "createdAt = " + createdAt + ", " +
+                "updatedAt = " + updatedAt + ", " +
+                "deptId = " + deptId + ")";
+    }
 }

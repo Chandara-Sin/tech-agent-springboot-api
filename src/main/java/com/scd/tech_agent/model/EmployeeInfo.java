@@ -1,4 +1,4 @@
-package com.scd.tech_agent.model.dto;
+package com.scd.tech_agent.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDto {
+public class EmployeeInfo {
     private String id;
     private String firstName;
     private String lastName;

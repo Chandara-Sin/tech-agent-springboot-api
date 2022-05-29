@@ -1,24 +1,17 @@
 package com.scd.tech_agent.entity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-
-import javax.persistence.*;
-
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
-// import org.hibernate.annotations.TypeDef;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
-@ToString
 @Getter
 @Setter
 @Entity
@@ -65,4 +58,16 @@ public class Employee {
     @Column(name = "postn_id")
     private Integer postnId;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "firstName = " + firstName + ", " +
+                "lastName = " + lastName + ", " +
+                "gender = " + gender + ", " +
+                "email = " + email + ", " +
+                "hireDate = " + hireDate + ", " +
+                "deptId = " + deptId + ", " +
+                "postnId = " + postnId + ")";
+    }
 }
