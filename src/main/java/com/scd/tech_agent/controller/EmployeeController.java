@@ -7,14 +7,14 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.dto.EmployeeDto;
+import com.scd.tech_agent.model.EmployeeInfo;
 import com.scd.tech_agent.service.EmployeeService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public record EmployeeController(EmployeeService employeeServ) {
@@ -40,13 +40,13 @@ public record EmployeeController(EmployeeService employeeServ) {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody EmployeeDto dataRequest) {
+    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody EmployeeInfo dataRequest) {
         return new ResponseEntity<>(employeeServ.addEmployee(dataRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{empId}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "empId") String empId,
-                                                   @Valid @RequestBody EmployeeDto dataRequest) {
+                                                   @Valid @RequestBody EmployeeInfo dataRequest) {
         return new ResponseEntity<>(employeeServ.updateEmployee(UUID.fromString(empId), dataRequest), HttpStatus.OK);
     }
 
