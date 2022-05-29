@@ -1,7 +1,5 @@
 package com.scd.tech_agent.repository;
 
-import com.scd.tech_agent.entity.Department;
-import com.scd.tech_agent.entity.Employee;
 import com.scd.tech_agent.entity.Position;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
