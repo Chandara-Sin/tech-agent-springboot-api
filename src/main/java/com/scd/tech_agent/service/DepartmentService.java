@@ -4,7 +4,6 @@ import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Department;
 import com.scd.tech_agent.repository.DepartmentRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,33 +12,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AllArgsConstructor
 @Service
-public class DepartmentService {
-
-    final DepartmentRepository departmentRepo;
+public record DepartmentService(DepartmentRepository departmentRepo) {
 
     public List<Department> getDepartmentList() {
+        List<Department> departmentList;
         try {
-            List<Department> departmentList = departmentRepo.findAll();
-            if (departmentList.isEmpty()) {
-                throw new DataNotFound("Found no Departments in Database");
-            } else return departmentList;
+            departmentList = departmentRepo.findAll();
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while retrieving Departments");
         }
+        if (departmentList.isEmpty())
+            throw new DataNotFound("Found no Departments in Database");
+        return departmentList;
     }
 
     public Department addDepartment(Department dataRequest) {
         if (departmentRepo.existsByDeptName(dataRequest.getDeptName()))
             throw new DataInvalid("duplicate department");
 
-        Department department = new Department();
-        department.setDeptName(dataRequest.getDeptName());
-        department.setCreatedAt(LocalDateTime.now());
-        department.setUpdatedAt(LocalDateTime.now());
+        dataRequest.setCreatedAt(LocalDateTime.now());
+        dataRequest.setUpdatedAt(LocalDateTime.now());
+
         try {
-            return departmentRepo.save(department);
+            return departmentRepo.save(dataRequest);
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while creating the Department");
         }
