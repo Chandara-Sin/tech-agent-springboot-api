@@ -12,24 +12,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // For Client Error
     @ExceptionHandler(DataNotFound.class)
-    public ResponseEntity<ErrorDetails> DataNotFoundException(DataNotFound ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorDetails> dataNotFoundException(DataNotFound ex, HttpServletRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getRequestURI(),
                 HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DataInvalid.class)
-    public ResponseEntity<ErrorDetails> DataDuplicateException(DataInvalid ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorDetails> dataDuplicateException(DataInvalid ex, HttpServletRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getRequestURI(),
                 HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    // For Server Error
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetails> globleExcpetionHandler(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorDetails> globalExceptionHandler(Exception ex, HttpServletRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
                 request.getRequestURI(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
