@@ -21,9 +21,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.0'
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools:2.7.0'
     runtimeOnly 'mysql:mysql-connector-java:8.0.29'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 }
 
 group = 'com.scd'
