@@ -4,6 +4,7 @@ import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Department;
 import com.scd.tech_agent.repository.DepartmentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public record DepartmentService(DepartmentRepository departmentRepo) {
+@RequiredArgsConstructor
+public class DepartmentService {
+
+    private final DepartmentRepository departmentRepo;
 
     public List<Department> getDepartmentList() {
         List<Department> departmentList;

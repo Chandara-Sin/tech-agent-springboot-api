@@ -14,12 +14,16 @@ import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.repository.PositionRepository;
 import com.scd.tech_agent.util.HelpersUtil;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-public record EmployeeService(EmployeeRepository employeesRepo, DepartmentRepository departmentRepo,
-                              PositionRepository positionRepo) {
+@RequiredArgsConstructor
+public class EmployeeService {
+    private final EmployeeRepository employeesRepo;
+    private final DepartmentRepository departmentRepo;
+    private final PositionRepository positionRepo;
 
     public List<Employee> getEmployeeList() {
         List<Employee> employeeList;
@@ -79,7 +83,7 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         employee.setLastName(dataRequest.getLastName());
         employee.setEmail(dataRequest.getEmail());
         employee.setGender(dataRequest.getGender());
-        employee.setHireDate(LocalDateTime.parse(dataRequest.getHireDate()));
+        employee.setHireDate(dataRequest.getHireDate());
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 
@@ -110,7 +114,7 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         employee.setLastName(dataRequest.getLastName());
         employee.setEmail(dataRequest.getEmail());
         employee.setGender(dataRequest.getGender());
-        employee.setHireDate(LocalDateTime.parse(dataRequest.getHireDate()));
+        employee.setHireDate(dataRequest.getHireDate());
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 

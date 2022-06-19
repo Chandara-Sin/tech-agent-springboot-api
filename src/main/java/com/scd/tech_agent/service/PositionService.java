@@ -5,6 +5,7 @@ import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.PositionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public record PositionService(PositionRepository positionRepo, DepartmentRepository departmentRepo) {
+@RequiredArgsConstructor
+public class PositionService {
+
+    private final PositionRepository positionRepo;
+    private final DepartmentRepository departmentRepo;
 
     public List<Position> getPositionList() {
         List<Position> positionList;

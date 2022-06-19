@@ -20,11 +20,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.0'
-    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
-    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools:2.7.0'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.28'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.6'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.29'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.0'
 }
 
 group = 'com.scd'
