@@ -1,6 +1,7 @@
 package com.scd.tech_agent.controller;
 
 import com.scd.tech_agent.entity.Department;
+import com.scd.tech_agent.model.dto.DepartmentDto;
 import com.scd.tech_agent.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,13 +26,13 @@ public class DepartmentController {
     }
 
     @PostMapping()
-    public ResponseEntity<Department> addDepartment(@Valid @RequestBody Department dataRequest) {
+    public ResponseEntity<Department> addDepartment(@Valid @RequestBody DepartmentDto dataRequest) {
         return new ResponseEntity<>(departmentServ.addDepartment(dataRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/{deptId}")
     public ResponseEntity<Department> updateDepartment(@PathVariable(value = "deptId") Integer deptId,
-                                                       @Valid @RequestBody Department dataRequest) {
+                                                       @Valid @RequestBody DepartmentDto dataRequest) {
         return new ResponseEntity<>(departmentServ.updateDepartment(deptId, dataRequest), HttpStatus.OK);
     }
 
