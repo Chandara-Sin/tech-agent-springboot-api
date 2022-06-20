@@ -3,6 +3,8 @@ package com.scd.tech_agent.service;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Department;
+import com.scd.tech_agent.model.dto.DepartmentDto;
+import com.scd.tech_agent.model.mapper.DepartmentMapper;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public record DepartmentService(DepartmentRepository departmentRepo) {
+@RequiredArgsConstructor
+public class DepartmentService {
+
+    private final DepartmentRepository departmentRepo;
+
+    private final DepartmentMapper departmentMapper;
 
     public List<Department> getDepartmentList() {
         List<Department> departmentList;
@@ -27,29 +34,29 @@ public record DepartmentService(DepartmentRepository departmentRepo) {
         return departmentList;
     }
 
-    public Department addDepartment(Department dataRequest) {
-        if (departmentRepo.existsByDeptName(dataRequest.getDeptName()))
+    public Department addDepartment(DepartmentDto dataRequest) {
+        if (departmentRepo.existsByDeptName(dataRequest.getDepartment()))
             throw new DataInvalid("duplicate department");
 
-        dataRequest.setCreatedAt(LocalDateTime.now());
-        dataRequest.setUpdatedAt(LocalDateTime.now());
+        var department = departmentMapper.toDepartment(dataRequest);
+        department.setCreatedAt(LocalDateTime.now());
+        department.setUpdatedAt(LocalDateTime.now());
 
         try {
-            return departmentRepo.save(dataRequest);
+            return departmentRepo.save(department);
         } catch (RuntimeException e) {
             throw new RuntimeException("Some error occurred while creating the Department");
         }
     }
 
-    public Department updateDepartment(Integer deptId, Department dataRequest) {
+    public Department updateDepartment(Integer deptId, DepartmentDto dataRequest) {
         Department department = departmentRepo.findById(deptId)
                 .orElseThrow(() -> new DataNotFound("Department not found for this id : " + deptId));
 
-        if (departmentRepo.existsByDeptName(dataRequest.getDeptName()))
+        if (departmentRepo.existsByDeptName(dataRequest.getDepartment()))
             throw new DataInvalid("duplicate department name");
 
-        department.setDeptName(dataRequest.getDeptName());
-        department.setCreatedAt(department.getCreatedAt());
+        department.setDeptName(dataRequest.getDepartment());
         department.setUpdatedAt(LocalDateTime.now());
 
         try {

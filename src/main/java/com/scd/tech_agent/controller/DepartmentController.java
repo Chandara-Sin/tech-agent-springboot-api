@@ -1,6 +1,7 @@
 package com.scd.tech_agent.controller;
 
 import com.scd.tech_agent.entity.Department;
+import com.scd.tech_agent.model.dto.DepartmentDto;
 import com.scd.tech_agent.service.DepartmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +21,14 @@ public record DepartmentController(DepartmentService departmentServ) {
         return new ResponseEntity<>(departmentServ.getDepartmentList(), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<Department> addDepartment(@Valid @RequestBody Department dataRequest) {
         return new ResponseEntity<>(departmentServ.addDepartment(dataRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/{deptId}")
     public ResponseEntity<Department> updateDepartment(@PathVariable(value = "deptId") Integer deptId,
-                                                       @Valid @RequestBody Department dataRequest) {
+                                                       @Valid @RequestBody DepartmentDto dataRequest) {
         return new ResponseEntity<>(departmentServ.updateDepartment(deptId, dataRequest), HttpStatus.OK);
     }
 
