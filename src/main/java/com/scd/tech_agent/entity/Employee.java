@@ -3,14 +3,11 @@ package com.scd.tech_agent.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,11 +16,8 @@ import java.util.UUID;
 public class Employee {
 
     @Id
-    @GeneratedValue(generator = "id")
-    @GenericGenerator(name = "uuid-generator", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
-    @Type(type = "uuid-char")
-    private UUID id;
+    @GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -36,11 +30,14 @@ public class Employee {
     // @Column(name = "gender", columnDefinition =
     // "ENUM('not_known','male','female','not_application')")
     private String gender;
-    private String email;
 
     @Column(name = "hire_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = ISO.DATE_TIME)
     private LocalDateTime hireDate;
+
+    @OneToOne(mappedBy = "employee")
+    @JsonIgnore
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "dept_id", nullable = false, updatable = false, insertable = false)
@@ -65,7 +62,6 @@ public class Employee {
                 "firstName = " + firstName + ", " +
                 "lastName = " + lastName + ", " +
                 "gender = " + gender + ", " +
-                "email = " + email + ", " +
                 "hireDate = " + hireDate + ", " +
                 "deptId = " + deptId + ", " +
                 "postnId = " + postnId + ")";

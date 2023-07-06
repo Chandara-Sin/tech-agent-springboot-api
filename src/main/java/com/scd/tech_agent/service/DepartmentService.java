@@ -19,7 +19,6 @@ import java.util.Map;
 public class DepartmentService {
 
     private final DepartmentRepository departmentRepo;
-
     private final DepartmentMapper departmentMapper;
 
     public List<Department> getDepartmentList() {

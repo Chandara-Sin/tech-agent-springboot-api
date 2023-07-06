@@ -8,7 +8,7 @@ import com.scd.tech_agent.entity.Position;
 import com.scd.tech_agent.exception.DataInvalid;
 import com.scd.tech_agent.exception.DataNotFound;
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.EmployeeInfo;
+import com.scd.tech_agent.model.dto.EmployeeDto;
 import com.scd.tech_agent.repository.DepartmentRepository;
 import com.scd.tech_agent.repository.EmployeeRepository;
 import com.scd.tech_agent.repository.PositionRepository;
@@ -62,9 +62,9 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         return employeeList;
     }
 
-    public Employee addEmployee(EmployeeInfo dataRequest) {
-        if (employeesRepo.existsByEmail(dataRequest.getEmail()))
-            throw new DataInvalid("duplicate email");
+    public Employee addEmployee(EmployeeDto dataRequest) {
+//        if (employeesRepo.existsByEmail(dataRequest.getEmail()))
+//            throw new DataInvalid("duplicate email");
         if (HelpersUtil.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
 
@@ -77,9 +77,9 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         Employee employee = new Employee();
         employee.setFirstName(dataRequest.getFirstName());
         employee.setLastName(dataRequest.getLastName());
-        employee.setEmail(dataRequest.getEmail());
+
         employee.setGender(dataRequest.getGender());
-        employee.setHireDate(LocalDateTime.parse(dataRequest.getHireDate()));
+        employee.setHireDate(dataRequest.getHireDate());
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 
@@ -90,12 +90,12 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
         }
     }
 
-    public Employee updateEmployee(UUID empId, EmployeeInfo dataRequest) {
+    public Employee updateEmployee(UUID empId, EmployeeDto dataRequest) {
         Employee employee = employeesRepo.findById(empId)
                 .orElseThrow(() -> new DataNotFound("Employee not found for this id : " + empId));
 
-        if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
-            throw new DataInvalid("duplicate email");
+//        if (employeesRepo.existsByEmailAndIdNot(dataRequest.getEmail(), empId))
+//            throw new DataInvalid("duplicate email");
 
         if (HelpersUtil.validateGender(dataRequest.getGender()))
             throw new DataInvalid("gender value : not_known, male, female, not_application");
@@ -108,9 +108,9 @@ public record EmployeeService(EmployeeRepository employeesRepo, DepartmentReposi
 
         employee.setFirstName(dataRequest.getFirstName());
         employee.setLastName(dataRequest.getLastName());
-        employee.setEmail(dataRequest.getEmail());
+
         employee.setGender(dataRequest.getGender());
-        employee.setHireDate(LocalDateTime.parse(dataRequest.getHireDate()));
+        employee.setHireDate(dataRequest.getHireDate());
         employee.setDeptId(department.getId());
         employee.setPostnId(position.getId());
 

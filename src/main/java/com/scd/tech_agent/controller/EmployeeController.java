@@ -7,7 +7,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.scd.tech_agent.entity.Employee;
-import com.scd.tech_agent.model.EmployeeInfo;
+import com.scd.tech_agent.model.dto.EmployeeDto;
 import com.scd.tech_agent.service.EmployeeService;
 
 import org.springframework.http.HttpStatus;
@@ -40,13 +40,13 @@ public record EmployeeController(EmployeeService employeeServ) {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody EmployeeInfo dataRequest) {
+    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody EmployeeDto dataRequest) {
         return new ResponseEntity<>(employeeServ.addEmployee(dataRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{empId}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "empId") String empId,
-                                                   @Valid @RequestBody EmployeeInfo dataRequest) {
+                                                   @Valid @RequestBody EmployeeDto dataRequest) {
         return new ResponseEntity<>(employeeServ.updateEmployee(UUID.fromString(empId), dataRequest), HttpStatus.OK);
     }
 

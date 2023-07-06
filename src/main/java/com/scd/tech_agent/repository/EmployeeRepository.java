@@ -16,11 +16,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
-        Boolean existsByEmail(String email);
+//        Boolean existsByEmail(String email);
 
         Optional<Employee> findById(UUID id);
 
-        Boolean existsByEmailAndIdNot(String email, UUID id);
+//        Boolean existsByEmailAndIdNot(String email, UUID id);
 
         List<Employee> findAllByDeptId(Integer deptId);
 

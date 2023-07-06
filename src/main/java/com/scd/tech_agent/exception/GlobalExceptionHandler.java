@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.scd.tech_agent.model.ResponseModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,7 +20,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(), HttpStatus.NOT_FOUND.getReasonPhrase()
         );
         return new ResponseEntity<>(
-                ErrorResponse.responseGeneral(errorDetails, HttpStatus.NOT_FOUND.value()),
+                ResponseModel.errorResponse(errorDetails, HttpStatus.NOT_FOUND.value()),
                 HttpStatus.NOT_FOUND
         );
     }
@@ -31,7 +32,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(), HttpStatus.BAD_REQUEST.getReasonPhrase()
         );
         return new ResponseEntity<>(
-                ErrorResponse.responseGeneral(errorDetails, HttpStatus.BAD_REQUEST.value()),
+                ResponseModel.errorResponse(errorDetails, HttpStatus.BAD_REQUEST.value()),
                 HttpStatus.BAD_REQUEST
         );
     }
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()
         );
         return new ResponseEntity<>(
-                ErrorResponse.responseGeneral(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR.value()),
+                ResponseModel.errorResponse(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR.value()),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
